@@ -1,6 +1,6 @@
 extends Node2D
 
-var npc = preload("res://Scenes/character/character.tscn")
+var npc = preload("res://Scenes/character/npc.tscn")
 
 #Character presets
 

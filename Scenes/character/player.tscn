@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://5r1bx7drfnsu"]
+
+[ext_resource type="PackedScene" uid="uid://c1rci72xijuci" path="res://Scenes/character/character.tscn" id="1_gco6m"]
+[ext_resource type="Script" path="res://Scenes/character/PlayerController.gd" id="2_46bde"]
+
+[node name="Player" instance=ExtResource("1_gco6m")]
+MIN_SPEED = 125
+MAX_SPEED = 125
+
+[node name="PlayerController" type="Node2D" parent="." index="7"]
+script = ExtResource("2_46bde")

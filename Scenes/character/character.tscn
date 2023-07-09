@@ -1,13 +1,16 @@
-[gd_scene load_steps=11 format=3 uid="uid://c1rci72xijuci"]
+[gd_scene load_steps=12 format=3 uid="uid://c1rci72xijuci"]
 
 [ext_resource type="Texture2D" uid="uid://bdclu6pp01il7" path="res://Assets/character/body.png" id="1_6vloe"]
 [ext_resource type="Texture2D" uid="uid://c61okmdk7a2cd" path="res://Assets/character/legs2.png" id="2_sox5i"]
 [ext_resource type="Texture2D" uid="uid://dsjm8mrv6ifmo" path="res://Assets/character/chest2.png" id="3_huudp"]
 [ext_resource type="Texture2D" uid="uid://dgsmpbws1rb2t" path="res://Assets/character/eyes.png" id="4_ook1b"]
 [ext_resource type="Texture2D" uid="uid://dydxsmx0p2f10" path="res://Assets/character/hair2.png" id="5_ko5m8"]
+[ext_resource type="Script" path="res://Scenes/character/animation_controller.gd" id="6_ls1r6"]
 
 [sub_resource type="GDScript" id="GDScript_hekqy"]
 script/source = "extends CharacterBody2D
+@export var MIN_SPEED = 200
+@export var MAX_SPEED = 350
 
 @onready var anim: AnimationPlayer = $AnimationPlayer
 @onready var body = $Body
@@ -15,6 +18,7 @@ script/source = "extends CharacterBody2D
 @onready var chest = $Chest
 @onready var eyes = $Eyes
 @onready var hair = $Hair
+@onready var speed = randf_range(MIN_SPEED, MAX_SPEED)
 
 var pos
 var body_color
@@ -24,6 +28,32 @@ var hairstyle
 var chestplate
 var trousers
 
+func GetImageSize() -> Vector2:
+	# Get all the Sprite2D nodes in your scene
+	var sprites: Array[Sprite2D] = [body, legs, chest, eyes, hair]
+
+	# Calculate the size of the final image based on the sprites
+	var width = 0
+	var height = 0
+	for sprite in sprites:
+		width = max(width, sprite.texture.get_width() + sprite.position.x)
+		height = max(height, sprite.texture.get_height() + sprite.position.y)
+		
+	return Vector2(width, height)
+		
+func GetImage() -> Node2D:
+	# Create a new blank image
+
+	# Get all the Sprite2D nodes in your scene
+	var sprites: Array[Sprite2D] = [body, legs, chest, eyes, hair]
+
+	var node = Node2D.new();
+	for sprite in sprites:
+		node.add_child(sprite.duplicate())
+		
+	return node;
+	
+	
 func _on_Body_frame_changed():
 	sync_frames(body.frame, body.flip_h)
 
@@ -111,6 +141,8 @@ height = 13.119
 collision_layer = 2
 motion_mode = 1
 script = SubResource("GDScript_hekqy")
+MIN_SPEED = 50
+MAX_SPEED = 200
 
 [node name="Body" type="Sprite2D" parent="."]
 self_modulate = Color(0.827451, 0.643137, 0.482353, 1)
@@ -146,6 +178,7 @@ hframes = 8
 libraries = {
 "": SubResource("AnimationLibrary_lyw27")
 }
+script = ExtResource("6_ls1r6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.924606, 12.4405)

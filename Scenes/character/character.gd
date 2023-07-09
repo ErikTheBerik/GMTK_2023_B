@@ -30,6 +30,7 @@ func sync_frames(frame, flip_h):
 	hair.flip_h = flip_h
 
 func _physics_process(delta):
+	print(velocity)
 	move_and_slide()
 
 func initialize(_pos, _body_color, _eyes_color, _hair_color, _hairstyle, _chestplate, _trousers):

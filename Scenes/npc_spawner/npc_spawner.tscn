@@ -3,24 +3,31 @@
 [sub_resource type="GDScript" id="GDScript_1t51n"]
 script/source = "extends Node2D
 
-var npc = preload(\"res://Scenes/character/character.tscn\")
-
+var npc = preload(\"res://Scenes/character/npc.tscn\")
+var player = preload(\"res://Scenes/character/player.tscn\")
 #Character presets
 
 #Skin preset
-@export var body_colors : PackedColorArray = [Color(\"#ffb67a\"), Color(\"#a3754e\")]
+@export var body_colors : Array[Color] = [Color(\"#ffb67a\"), Color(\"#a3754e\")]
 #Eyes preset
-@export var eye_colors : PackedColorArray = [Color(\"#00d5ff\")]
+@export var eye_colors : Array[Color] = [Color(\"#00d5ff\")]
 #Hair preset
-@export var hair_colors: PackedColorArray = [Color(\"#3c3c3c\"), Color(\"#d8c490\"), Color(\"#94dcc4\")]
+@export var hair_colors: Array[Color] = [Color(\"#3c3c3c\"), Color(\"#d8c490\"), Color(\"#94dcc4\")]
 @export var hairstyles = [preload(\"res://Assets/character/hair.png\"), preload(\"res://Assets/character/hair2.png\")] # (Array, Texture2D)
 #Chest preset
 @export var chestplates = [preload(\"res://Assets/character/chest.png\"), preload(\"res://Assets/character/chest2.png\")] # (Array, Texture2D)
 #Legs preset
 @export var trousers = [preload(\"res://Assets/character/legs.png\"), preload(\"res://Assets/character/legs2.png\")] # (Array, Texture2D)
 	
-func spawn() -> CharacterBody2D:
+func spawn_npc() -> CharacterBody2D:
 	var instance = npc.instantiate()
+	var pos = Vector2(position.x + randf_range(-50, 50), position.y)
+	instance.initialize(pos, rnd_item(body_colors), rnd_item(eye_colors), rnd_item(hair_colors), rnd_item(hairstyles), rnd_item(chestplates), rnd_item(trousers))
+	get_tree().current_scene.add_child(instance)
+	return instance;
+	
+func spawn_player() -> CharacterBody2D:
+	var instance = player.instantiate()
 	var pos = Vector2(position.x + randf_range(-50, 50), position.y)
 	instance.initialize(pos, rnd_item(body_colors), rnd_item(eye_colors), rnd_item(hair_colors), rnd_item(hairstyles), rnd_item(chestplates), rnd_item(trousers))
 	get_tree().current_scene.add_child(instance)
@@ -34,3 +41,6 @@ func rnd_item(array : Array):
 
 [node name="NPCSpawner" type="Node2D"]
 script = SubResource("GDScript_1t51n")
+body_colors = Array[Color]([Color(0.768627, 0.705882, 0.592157, 1), Color(1, 0.713726, 0.478431, 1), Color(0.639216, 0.458824, 0.305882, 1), Color(0.360941, 0.23374, 0.137304, 1), Color(0.572549, 0.807843, 0.403922, 1), Color(0.776471, 0.776471, 0.776471, 1), Color(0.909804, 0.576471, 0.6, 1)])
+eye_colors = Array[Color]([Color(0, 0.835294, 1, 1), Color(0, 1, 0, 1), Color(0.00784314, 0.215686, 0.929412, 1), Color(0.34902, 0.196078, 0.101961, 1)])
+hair_colors = Array[Color]([Color(0.235294, 0.235294, 0.235294, 1), Color(0.847059, 0.768627, 0.564706, 1), Color(0.580392, 0.862745, 0.768627, 1), Color(0.768627, 0.619608, 0.294118, 1), Color(0.619608, 0.360784, 0.188235, 1), Color(0.243137, 0.658824, 0.243137, 1), Color(0.929412, 0.921569, 0.733333, 1), Color(0.572549, 0.321569, 0.694118, 1)])

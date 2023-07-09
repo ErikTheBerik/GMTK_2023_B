@@ -1,11 +1,21 @@
-[gd_scene load_steps=3 format=3 uid="uid://dqb0hcccydvpq"]
+[gd_scene load_steps=4 format=3 uid="uid://dqb0hcccydvpq"]
 
 [ext_resource type="Script" path="res://Level.gd" id="1_pe55m"]
 [ext_resource type="PackedScene" uid="uid://d0x746l8602gb" path="res://Scenes/npc_spawner/npc_spawner.tscn" id="2_ln4nf"]
+[ext_resource type="PackedScene" uid="uid://dd8twtihjcmr7" path="res://Scenes/character/player_info.tscn" id="3_ms8g0"]
 
 [node name="Level" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_pe55m")
+MIN_SIZE = 300.0
+MAX_SIZE = 550.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="Spawner" parent="." instance=ExtResource("2_ln4nf")]
+
+[node name="PlayerInfo" parent="." instance=ExtResource("3_ms8g0")]
+offset_right = 167.0
+offset_bottom = 120.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
