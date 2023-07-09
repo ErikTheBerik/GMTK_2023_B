@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://dqb0hcccydvpq"]
+
+[ext_resource type="Script" path="res://Level.gd" id="1_pe55m"]
+[ext_resource type="PackedScene" uid="uid://d0x746l8602gb" path="res://Scenes/npc_spawner/npc_spawner.tscn" id="2_ln4nf"]
+
+[node name="Level" type="Node2D"]
+script = ExtResource("1_pe55m")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Spawner" parent="." instance=ExtResource("2_ln4nf")]

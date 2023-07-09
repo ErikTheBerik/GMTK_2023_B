@@ -1,0 +1,155 @@
+[gd_scene load_steps=11 format=3 uid="uid://c1rci72xijuci"]
+
+[ext_resource type="Texture2D" uid="uid://bdclu6pp01il7" path="res://Assets/character/body.png" id="1_6vloe"]
+[ext_resource type="Texture2D" uid="uid://c61okmdk7a2cd" path="res://Assets/character/legs2.png" id="2_sox5i"]
+[ext_resource type="Texture2D" uid="uid://dsjm8mrv6ifmo" path="res://Assets/character/chest2.png" id="3_huudp"]
+[ext_resource type="Texture2D" uid="uid://dgsmpbws1rb2t" path="res://Assets/character/eyes.png" id="4_ook1b"]
+[ext_resource type="Texture2D" uid="uid://dydxsmx0p2f10" path="res://Assets/character/hair2.png" id="5_ko5m8"]
+
+[sub_resource type="GDScript" id="GDScript_hekqy"]
+script/source = "extends CharacterBody2D
+
+@onready var anim: AnimationPlayer = $AnimationPlayer
+@onready var body = $Body
+@onready var legs = $Legs
+@onready var chest = $Chest
+@onready var eyes = $Eyes
+@onready var hair = $Hair
+
+var pos
+var body_color
+var eyes_color
+var hair_color
+var hairstyle
+var chestplate
+var trousers
+
+func _on_Body_frame_changed():
+	sync_frames(body.frame, body.flip_h)
+
+func sync_frames(frame, flip_h):
+	legs.frame = frame
+	chest.frame = frame
+	eyes.frame = frame
+	hair.frame = frame
+	
+	legs.flip_h = flip_h
+	chest.flip_h = flip_h
+	eyes.flip_h = flip_h
+	hair.flip_h = flip_h
+
+func _physics_process(delta):
+	move_and_slide()
+
+func initialize(_pos, _body_color, _eyes_color, _hair_color, _hairstyle, _chestplate, _trousers):
+	pos = _pos
+	body_color = _body_color
+	eyes_color = _eyes_color
+	hair_color = _hair_color
+	hairstyle = _hairstyle
+	chestplate = _chestplate
+	trousers = _trousers
+
+func _ready():
+	position = pos
+	body.self_modulate = body_color
+	eyes.self_modulate = eyes_color
+	hair.self_modulate = hair_color
+	hair.texture = hairstyle
+	chest.texture = chestplate
+	legs.texture = trousers
+	anim.play(\"idling\")
+	anim.seek(randf_range(0.0, anim.current_animation_length), true)
+	anim.speed_scale = randf_range(0.7, 1.1)
+"
+
+[sub_resource type="Animation" id="1"]
+resource_name = "idling"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3]
+}
+
+[sub_resource type="Animation" id="2"]
+resource_name = "walking"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Body:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [4, 5, 6, 7]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lyw27"]
+_data = {
+"idling": SubResource("1"),
+"walking": SubResource("2")
+}
+
+[sub_resource type="CapsuleShape2D" id="3"]
+radius = 4.5595
+height = 13.119
+
+[node name="Character" type="CharacterBody2D"]
+collision_layer = 2
+motion_mode = 1
+script = SubResource("GDScript_hekqy")
+
+[node name="Body" type="Sprite2D" parent="."]
+self_modulate = Color(0.827451, 0.643137, 0.482353, 1)
+texture_filter = 1
+texture = ExtResource("1_6vloe")
+hframes = 8
+
+[node name="Legs" type="Sprite2D" parent="."]
+self_modulate = Color(0.760784, 0.776471, 0.772549, 1)
+texture_filter = 1
+texture = ExtResource("2_sox5i")
+hframes = 8
+
+[node name="Chest" type="Sprite2D" parent="."]
+self_modulate = Color(0.760784, 0.776471, 0.772549, 1)
+texture_filter = 1
+texture = ExtResource("3_huudp")
+hframes = 8
+
+[node name="Eyes" type="Sprite2D" parent="."]
+self_modulate = Color(0.968627, 0.403922, 0.403922, 1)
+texture_filter = 1
+texture = ExtResource("4_ook1b")
+hframes = 8
+
+[node name="Hair" type="Sprite2D" parent="."]
+self_modulate = Color(0.580392, 0.862745, 0.768627, 1)
+texture_filter = 1
+texture = ExtResource("5_ko5m8")
+hframes = 8
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_lyw27")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.924606, 12.4405)
+rotation = 1.5708
+shape = SubResource("3")
+
+[connection signal="frame_changed" from="Body" to="." method="_on_Body_frame_changed"]

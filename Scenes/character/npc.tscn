@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://c3ranxv6appcl"]
+
+[ext_resource type="PackedScene" uid="uid://c1rci72xijuci" path="res://Scenes/character/character.tscn" id="1_fc6tm"]
+[ext_resource type="Script" path="res://Scenes/character/CharacterController.gd" id="2_5v6vi"]
+
+[node name="Character" instance=ExtResource("1_fc6tm")]
+
+[node name="CharacterController" type="Node2D" parent="." index="7"]
+script = ExtResource("2_5v6vi")
